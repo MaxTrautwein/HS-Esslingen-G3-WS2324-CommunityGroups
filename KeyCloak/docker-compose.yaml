@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: Postgres_PW
+    networks:
+      - db
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.5
+    command: start #start-dev
+    restart: unless-stopped
+    environment:
+      - KEYCLOAK_ADMIN=KeyCloakAdminUser
+      - KEYCLOAK_ADMIN_PASSWORD=KeyCloakAdminPW
+      - KC_DB=postgres
+      - KC_DB_PASSWORD=Postgres_PW
+      - KC_DB_USERNAME=postgres
+      - KC_DB_URL_HOST=db
+      - KC_PROXY=edge
+      - KC_HOSTNAME=keycloak.DOMAIN
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.keycloak.rule=Host(`keycloak.DOMAIN`)'
+      - 'traefik.http.routers.keycloak.entrypoints=https'
+      - 'traefik.http.routers.keycloak.tls=true'
+      - 'traefik.http.routers.keycloak.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.keycloak.tls.domains[0].sans=*.DOMAIN'
+      - "traefik.docker.network=proxy"
+    networks:
+      - db
+      - proxy
+
+networks:
+  db: 
+    driver: bridge
+  proxy:
+    external: true
