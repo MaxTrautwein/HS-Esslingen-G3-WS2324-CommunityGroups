@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextTab2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter text"/>
+
+    <Button
+        android:id="@+id/buttonDisplayTab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextTab2"
+        android:layout_marginTop="16dp"
+        android:text="Send Text"/>
+
+    <TextView
+        android:id="@+id/textViewDisplayTab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonDisplayTab2"
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:textSize="18sp"/>
+</RelativeLayout>
