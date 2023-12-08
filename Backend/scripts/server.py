@@ -3,6 +3,8 @@ import socketio
 import json
 import logging
 import db
+import requests
+from typing import Optional
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio, static_files={
@@ -24,7 +26,7 @@ logger.addHandler(ch)
 # Where sid is the Key and the Value is:
 # - None for non authenticated Clients
 # - User ID for an authenticated Client
-connections: dict[str, int | None] = {}
+connections: dict[str, Optional[int]] = {}
 # Not sure if this is the Best way to handle that
 # Where sid is the Key and the Value is the DB Instance
 dbInstance: dict[str, db.Database] = {}
@@ -37,22 +39,28 @@ def getDB_Instance(sid) -> db.Database:
         return dbInstance[sid]
 
 def closeDB_Instance(sid):
-    instance = dbInstance.pop(sid)
-    instance.DeInit()
+    instance = dbInstance.pop(sid,None)
+    if (instance is not None):
+        instance.DeInit()
 
 
-def getUserID(sid) -> int | None:
+def getUserID(sid) -> Optional[int]:
     return connections[sid]
 
 def isAuthenticatedUser(sid) -> bool:
     return getUserID(sid) is not None
 
-def ValidateToken(token) -> str | None:
+def ValidateToken(token) -> Optional[str]:
     userInfoDomain = "https://keycloak.dk4max.com/realms/CommunityGroups/protocol/openid-connect/userinfo"
-    # TODO Make Request and retun
-    # sub if it is Valid
-    # None if it is Invalid
-    return "sub"
+    headers = {'Authorization': "Bearer " + token}
+    r = requests.get(url=userInfoDomain,headers=headers)
+    if (r.status_code == 401):
+        return None
+    elif (r.status_code == 200):
+        return r.json()["sub"]
+    else:
+        logger.error(f"Unexpected Response Code: {r.status_code}")
+        return None
 
 @sio.event
 def connect(sid, environ):
@@ -64,18 +72,21 @@ def Auth(sid, msg):
     # TODO Check how the token will be sent & then get the token
     token = msg
     sub = ValidateToken(token)
-    if(sub in None):
+    if(sub is None):
         # Invalid Token
         # Maybe let them know
+        logger.debug(f"Authentication failed for Session {sid}")
+        logger.debug(f"Using token: {token}")
         sio.emit("status", "Token Error",to=sid)
         # Disconnect
-        # TODO Check if the Disconnect event will be called
         sio.disconnect(sid)
     else:
         # Valid Token
         # Get the User ID
         # This needs a Database Connection
+        logger.debug(f"Authentication succeeded for Session {sid}")
         id = getDB_Instance(sid).getUserIDbySUB(sub=sub)
+        logger.debug(f"Logged in {sub} as userID {id}")
         connections[sid] = id
         sio.emit("status", "Auth Success",to=sid)
 
@@ -99,7 +110,7 @@ def myMessage(sid, data):
 def disconnect(sid):
     connections.pop(sid,None)
     closeDB_Instance(sid)
-    print('disconnect ', sid)
+    logger.debug(f'disconnect {sid}')
 
 if __name__ == '__main__':
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)

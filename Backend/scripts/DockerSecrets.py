@@ -3,4 +3,4 @@ import os
 # and or Centrally Manage some Configuration
 
 def getDatabasePW():
-    return "TODO"
+    return "example"
