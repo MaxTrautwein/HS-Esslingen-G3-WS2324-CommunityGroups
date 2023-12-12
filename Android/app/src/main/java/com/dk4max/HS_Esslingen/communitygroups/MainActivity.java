@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -29,10 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText etPassword;
     private EditText etUsername;
-    private Button btnLogin;
-
-
-
+    private ImageButton imgButton;
 
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -46,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+        /*binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -66,12 +64,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
-
         etPassword = findViewById(R.id.editTextTextPassword);
         etUsername = findViewById(R.id.editTextText);
-        btnLogin = findViewById(R.id.button);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        imgButton = (ImageButton) findViewById(R.id.imageButton);
+
+        imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getAccessToken();
