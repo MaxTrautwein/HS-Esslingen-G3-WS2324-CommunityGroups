@@ -34,8 +34,8 @@ android {
 dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.4.0")
-
-
+    testImplementation ("org.mockito:mockito-core:5.8.0")
+    testImplementation ("org.mockito:mockito-inline:5.2.0")
 
 
     implementation("androidx.appcompat:appcompat:1.6.1")
