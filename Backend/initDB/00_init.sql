@@ -4,7 +4,7 @@
 -- TODO Maybe save a Public Key so we could add some encryption
 create table Users (
     id serial primary key,
-    keycloakID text
+    sub text
 );
 
 -- A Group has a associated Owner, Name and Description

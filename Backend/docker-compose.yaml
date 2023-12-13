@@ -1,0 +1,21 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:16rc1-alpine3.18
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - ./database:/var/lib/postgresql/data
+      - ./initDB:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    
+  python:
+    build: .
+    container_name: socketIO
+    volumes:
+      - ./scripts:/home/scripts
+    entrypoint: ["python3","server.py"]
+    ports:
+      - 5000:5000
+    restart: unless-stopped
