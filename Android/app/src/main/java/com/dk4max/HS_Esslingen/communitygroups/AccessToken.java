@@ -26,4 +26,8 @@ public class AccessToken {
         this.expiresIn = expiresIn;
     }
 
+    protected String getAccessToken(){
+        return accessToken;
+    }
+
 }

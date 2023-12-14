@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -18,6 +20,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import android.os.Handler;
+import android.os.Looper;
+
 
 import com.dk4max.HS_Esslingen.communitygroups.databinding.ActivityMainBinding;
 
@@ -25,18 +30,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText etPassword;
     private EditText etUsername;
-    private Button btnLogin;
-
-
-
+    private ImageButton imgButton;
 
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    private Socket socket;
+
+    private Emitter.Listener authenticationResponse = new Emitter.Listener() {
+        @Override
+        public void call(final Object... args) {
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String serverResponse = (String) args[0];
+
+                    if ("Auth Success".equals(serverResponse)) {
+                        Toast.makeText(MainActivity.this, "Successful login!", Toast.LENGTH_LONG).show();
+                    } else if ("Token Error".equals(serverResponse)) {
+                        Toast.makeText(MainActivity.this, "There was an Error with your login.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +76,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -65,18 +88,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
         etPassword = findViewById(R.id.editTextTextPassword);
         etUsername = findViewById(R.id.editTextText);
-        btnLogin = findViewById(R.id.button);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        imgButton = (ImageButton) findViewById(R.id.imageButton);
+
+        imgButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getAccessToken();
             }
         });
+        socket = SocketManager.getSocket();
+        socket.on("status", authenticationResponse);
+        socket.connect();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        socket.disconnect();
     }
 
     @Override
@@ -93,14 +124,20 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
+    private void sendAuthentication(String token){
+        try{
+            socket.emit("Auth", token);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void getAccessToken() {
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
 
         String password = etPassword.getText().toString();
         String username = etUsername.getText().toString();
-        String client_secret = "Hier steht das client secret";
+        String client_secret = "s24VQHhC7yl3csWkxsN4rqHZsomGeagl";
 
         Call<AccessToken> call = service.getAccessToken("AppLogin", "password", client_secret, "openid", username, password);
 
@@ -108,9 +145,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
                 if(response.isSuccessful()) {
-                    AccessToken accesToken = response.body();
+                    AccessToken accessToken = response.body();
                     Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                    MainActivity.this.startActivity(intent);
+                    //MainActivity.this.startActivity(intent);
+                    System.out.println(accessToken.getAccessToken());
+                    sendAuthentication(accessToken.getAccessToken());
                 } else {
                     Toast.makeText(MainActivity.this, "Errortest1243", Toast.LENGTH_LONG).show();
                 }
@@ -121,8 +160,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error45", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
     }
 }

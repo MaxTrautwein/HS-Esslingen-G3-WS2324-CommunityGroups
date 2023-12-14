@@ -19,36 +19,71 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="361dp"
-        android:layout_height="74dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="180dp"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="@+id/nav_host_fragment_content_main"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <EditText
         android:id="@+id/editTextTextPassword"
-        android:layout_width="358dp"
-        android:layout_height="46dp"
+        android:layout_width="354dp"
+        android:layout_height="53dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:text=""
+        android:hint="Password"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/editTextText"
-        android:layout_width="352dp"
-        android:layout_height="48dp"
+        android:layout_width="354dp"
+        android:layout_height="52dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:lineSpacingExtra="10sp"
+        android:text=""
+        android:hint="Username"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="120dp"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="login"
+        app:layout_constraintBottom_toBottomOf="@+id/nav_host_fragment_content_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/login" />
+
+    <ImageButton
+        android:id="@+id/profil"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="@color/white"
+        android:contentDescription="login"
+        app:layout_constraintBottom_toTopOf="@+id/WelcomeBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/profil"/>
+
+    <TextView
+        android:id="@+id/WelcomeBack"
+        android:layout_width="354dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="30dp"
+        android:text="Welcome back!"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

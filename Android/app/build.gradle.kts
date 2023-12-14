@@ -35,7 +35,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.4.0")
 
-
+    implementation ("io.socket:socket.io-client:2.0.0")
 
 
     implementation("androidx.appcompat:appcompat:1.6.1")
