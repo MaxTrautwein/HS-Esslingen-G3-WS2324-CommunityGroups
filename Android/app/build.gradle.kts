@@ -32,6 +32,12 @@ android {
 }
 
 dependencies {
+    implementation("joda-time:joda-time:2.12.5")
+    implementation("com.squareup.okio:okio:3.6.0")
+    implementation("net.openid:appauth:0.11.1")
+
+
+
     implementation("com.squareup.retrofit2:retrofit:2.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.4.0")
 
