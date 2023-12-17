@@ -4,7 +4,8 @@
 -- TODO Maybe save a Public Key so we could add some encryption
 create table Users (
     id serial primary key,
-    sub text
+    sub text,
+    username text
 );
 
 -- A Group has a associated Owner, Name and Description
