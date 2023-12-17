@@ -50,14 +50,14 @@ def getUserID(sid) -> Optional[int]:
 def isAuthenticatedUser(sid) -> bool:
     return getUserID(sid) is not None
 
-def ValidateToken(token) -> Optional[str]:
+def ValidateToken(token):
     userInfoDomain = "https://keycloak.dk4max.com/realms/CommunityGroups/protocol/openid-connect/userinfo"
     headers = {'Authorization': "Bearer " + token}
     r = requests.get(url=userInfoDomain,headers=headers)
     if (r.status_code == 401):
         return None
     elif (r.status_code == 200):
-        return r.json()["sub"]
+        return r.json()
     else:
         logger.error(f"Unexpected Response Code: {r.status_code}")
         return None
@@ -71,8 +71,8 @@ def connect(sid, environ):
 def Auth(sid, msg):
     # TODO Check how the token will be sent & then get the token
     token = msg
-    sub = ValidateToken(token)
-    if(sub is None):
+    userinfo = ValidateToken(token)
+    if(userinfo is None):
         # Invalid Token
         # Maybe let them know
         logger.debug(f"Authentication failed for Session {sid}")
@@ -85,7 +85,11 @@ def Auth(sid, msg):
         # Get the User ID
         # This needs a Database Connection
         logger.debug(f"Authentication succeeded for Session {sid}")
-        id = getDB_Instance(sid).getUserIDbySUB(sub=sub)
+        dbInstance = getDB_Instance(sid)
+        sub = userinfo['sub']
+        id = dbInstance.getUserIDbySUB(sub=sub)
+        if (id is None):
+            id = dbInstance.CreateUser(userinfo)
         logger.debug(f"Logged in {sub} as userID {id}")
         connections[sid] = id
         sio.emit("status", "Auth Success",to=sid)
