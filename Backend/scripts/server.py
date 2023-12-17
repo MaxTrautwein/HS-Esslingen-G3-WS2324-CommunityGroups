@@ -132,6 +132,7 @@ def GetAllChatMsgFor(sid,data):
         msgs = database.GetAllChatMsg(user,otherUser)
         sio.emit("reply", msgs ,to=sid)
 
+# TODO Prevent this from overrinding none NONE Values
 @sio.event
 def UpdateReadTime(sid,data):
     if ValidateAuthentication(sid):
@@ -141,6 +142,7 @@ def UpdateReadTime(sid,data):
         database.UpdateReadTime(msgId=msgID,userID=user)
         sio.emit("status", f"Updated Read for {msgID}",to=sid)
 
+# TODO Prevent this from overrinding none NONE Values
 @sio.event
 def UpdateReciveTime(sid,data):
     if ValidateAuthentication(sid):

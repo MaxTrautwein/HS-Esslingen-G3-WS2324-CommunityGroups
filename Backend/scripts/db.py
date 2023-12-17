@@ -2,6 +2,7 @@ import psycopg2
 import logging
 import DockerSecrets
 import json
+from datetime import datetime
 from typing import Optional
 
 logger = logging.getLogger('CC')
@@ -31,7 +32,11 @@ class Database:
     # Create a New User by Providing the KeyCloak User Info
     def CreateUser(self,userinfo : json) -> int:
         # Use psycopg2 Parameter to ensure that the name is sanitized 
-        self.cur.execute(f"insert into Users(sub, username) VALUES ('{userinfo['sub']}',%s) returning id;",(userinfo['preferred_username']))
+        self.cur.execute("""
+        insert into Users(sub, username) VALUES (%s,%s) returning id;
+        """,
+        (userinfo['sub'],userinfo['preferred_username']))
+        
         id = self.cur.fetchone()[0]
         self.con.commit()
         return id
@@ -47,11 +52,13 @@ class Database:
         return None  
     
     def getUserNameByID(self,userID : int) -> str:
-        self.cur.execute(f"select username from Users where Users.sub = '{userID}'")
+        self.cur.execute(f"select username from Users where Users.id = '{userID}'")
         return self.cur.fetchone()[0]
     
+    # TODO check why the psycopg2 Formating is not working here
+    # This is a security risk
     def getUserIDbyName(self,username : str) -> Optional[int]:
-        self.cur.execute(f"select id from Users where Users.username = %s",username)
+        self.cur.execute(f"select id from Users where username = '{username}'")
         res = self.cur.fetchone()
         if (res is not None):
             return res[0]
@@ -59,7 +66,7 @@ class Database:
 
     # Privae Messages Chat "Room"'s
     def getDirectMessageChatRooms(self,userID : int):
-        self.cur.execute(f"select DISTINCT sender,target from DirectMessages where DirectMessages.sender = '{userID}' or DirectMessages.target = '{userID}'")
+        self.cur.execute(f"select DISTINCT sender,receiver from DirectMessages where DirectMessages.sender = '{userID}' or DirectMessages.receiver = '{userID}'")
         Rooms = self.cur.fetchall()
         result = []
         for room in Rooms:
@@ -92,20 +99,30 @@ class Database:
     def GetAllChatMsg(self,sender : int ,receiver : int ):
         self.cur.execute("""
         select * from DirectMessages where
-        DirectMessages.sender = %s or DirectMessages.target = %s or
-        DirectMessages.target = %s or DirectMessages.sender = %s or                
-        order by DirectMessages.id
+        DirectMessages.sender = %s or DirectMessages.receiver = %s or
+        DirectMessages.receiver = %s or DirectMessages.sender = %s               
+        ORDER BY DirectMessages.id
         """,
         (sender,receiver,sender,receiver))
         messages = self.cur.fetchall()
         result = []
         for msg in messages:
+            recTime = msg[5]
+            if (recTime is None):
+                recTime = ""
+            else:
+                recTime = msg[5].strftime("%d.%m.%Y %H:%M")
+            readTime = msg[6]
+            if (readTime is None):
+                readTime = ""
+            else:
+                readTime = msg[6].strftime("%d.%m.%Y %H:%M")
             result.append({"id":msg[0], 
                            "sender":self.getUserNameByID(msg[1]),
                            "receiver":self.getUserNameByID(msg[2]), 
                            "msg":msg[3],
-                           "sendTime":msg[4],
-                           "recTime":msg[5],
-                           "readTime":msg[6]
+                           "sendTime":msg[4].strftime("%d.%m.%Y %H:%M"),
+                           "recTime":recTime,
+                           "readTime":readTime
                            })
         return result
