@@ -43,9 +43,16 @@ def closeDB_Instance(sid):
     if (instance is not None):
         instance.DeInit()
 
+def ValidateAuthentication(sid) -> bool:
+    if (not isAuthenticatedUser(sid)):
+        logger.debug(f'No valid Auth for {sid}')
+        sio.emit("status", "Authentication Required",to=sid)
+        sio.disconnect(sid)
+        return False
+    return True
 
 def getUserID(sid) -> Optional[int]:
-    return connections[sid]
+    return connections.get(sid)
 
 def isAuthenticatedUser(sid) -> bool:
     return getUserID(sid) is not None
@@ -93,6 +100,55 @@ def Auth(sid, msg):
         logger.debug(f"Logged in {sub} as userID {id}")
         connections[sid] = id
         sio.emit("status", "Auth Success",to=sid)
+
+@sio.event
+def GetChatGroups(sid, data):
+    if ValidateAuthentication(sid):
+        msg = getDB_Instance(sid).getDirectMessageChatRooms(getUserID(sid))
+        sio.emit("reply", msg ,to=sid)
+
+@sio.event
+def SendMsgToUser(sid,data):
+    if ValidateAuthentication(sid):
+        msg = data["msg"]
+        target = data["target"]
+        database = getDB_Instance(sid)
+        user = database.getUserIDbyName(target)
+        if user is None:
+            sio.emit("status", f"User: {user} does not extist",to=sid)
+            return
+        database.SendDirectMessageTo(getUserID(sid),user,msg)
+        # Msg Is sent
+        # But the target would still need to recive it
+        # TODO Let the Target konw if they are online
+
+# That is not an Ideal Implementation
+@sio.event
+def GetAllChatMsgFor(sid,data):
+    if ValidateAuthentication(sid):
+        database = getDB_Instance(sid)
+        user = getUserID(sid)
+        otherUser = data["target"] 
+        msgs = database.GetAllChatMsg(user,otherUser)
+        sio.emit("reply", msgs ,to=sid)
+
+@sio.event
+def UpdateReadTime(sid,data):
+    if ValidateAuthentication(sid):
+        database = getDB_Instance(sid)
+        user = getUserID(sid)
+        msgID : int = data["id"]
+        database.UpdateReadTime(msgId=msgID,userID=user)
+        sio.emit("status", f"Updated Read for {msgID}",to=sid)
+
+@sio.event
+def UpdateReciveTime(sid,data):
+    if ValidateAuthentication(sid):
+        database = getDB_Instance(sid)
+        user = getUserID(sid)
+        msgID : int = data["id"]
+        database.UpdateReciveTime(msgId=msgID,userID=user)
+        sio.emit("status", f"Updated Recive for {msgID}",to=sid)
 
 @sio.event
 def my_message(sid, data):

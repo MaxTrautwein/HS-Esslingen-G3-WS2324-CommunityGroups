@@ -30,7 +30,8 @@ class Database:
 
     # Create a New User by Providing the KeyCloak User Info
     def CreateUser(self,userinfo : json) -> int:
-        self.cur.execute(f"insert into Users(sub, username) VALUES ('{userinfo['sub']}','{userinfo['name']}') returning id;")
+        # Use psycopg2 Parameter to ensure that the name is sanitized 
+        self.cur.execute(f"insert into Users(sub, username) VALUES ('{userinfo['sub']}',%s) returning id;",(userinfo['preferred_username']))
         id = self.cur.fetchone()[0]
         self.con.commit()
         return id
@@ -48,6 +49,13 @@ class Database:
     def getUserNameByID(self,userID : int) -> str:
         self.cur.execute(f"select username from Users where Users.sub = '{userID}'")
         return self.cur.fetchone()[0]
+    
+    def getUserIDbyName(self,username : str) -> Optional[int]:
+        self.cur.execute(f"select id from Users where Users.username = %s",username)
+        res = self.cur.fetchone()
+        if (res is not None):
+            return res[0]
+        return None 
 
     # Privae Messages Chat "Room"'s
     def getDirectMessageChatRooms(self,userID : int):
@@ -60,4 +68,44 @@ class Database:
             if userID == room[0]:
                 otherUser = room[1]
             result.append({"user_id":otherUser,"username":self.getUserNameByID(otherUser)})
+        return result
+    
+    def SendDirectMessageTo(self,sender : int ,receiver : int, msg : str):
+        # Use psycopg2 Parameter to ensure that the msg is sanitized 
+        self.cur.execute("""
+        INSERT INTO DirectMessages (sender, receiver, msg, sendTime)
+        VALUES (%s, %s, %s,now());
+        """,
+        (sender,receiver,msg))
+        self.con.commit()
+    
+    def UpdateReciveTime(self, msgId: int, userID : int):
+        self.cur.execute(f"update directmessages set recTime = now() where id = {msgId} and receiver = {userID}")
+        self.con.commit()
+
+    def UpdateReadTime(self, msgId: int, userID : int):
+        self.cur.execute(f"update directmessages set readTime = now() where id = {msgId} and receiver = {userID}")
+        self.con.commit()
+    
+    # Proably rather ineffeciant but its a first step
+    # TODO Save the Messages on the device and request new ones
+    def GetAllChatMsg(self,sender : int ,receiver : int ):
+        self.cur.execute("""
+        select * from DirectMessages where
+        DirectMessages.sender = %s or DirectMessages.target = %s or
+        DirectMessages.target = %s or DirectMessages.sender = %s or                
+        order by DirectMessages.id
+        """,
+        (sender,receiver,sender,receiver))
+        messages = self.cur.fetchall()
+        result = []
+        for msg in messages:
+            result.append({"id":msg[0], 
+                           "sender":self.getUserNameByID(msg[1]),
+                           "receiver":self.getUserNameByID(msg[2]), 
+                           "msg":msg[3],
+                           "sendTime":msg[4],
+                           "recTime":msg[5],
+                           "readTime":msg[6]
+                           })
         return result

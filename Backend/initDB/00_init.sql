@@ -32,7 +32,7 @@ create table GroupMembers (
 create table DirectMessages (
     id serial primary key,
     sender int references Users(id),
-    target int references Users(id),
+    receiver int references Users(id),
     msg text,
     sendTime timestamp,
     recTime timestamp,
