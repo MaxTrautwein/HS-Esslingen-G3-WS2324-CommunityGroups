@@ -54,11 +54,10 @@ class Database:
     def getUserNameByID(self,userID : int) -> str:
         self.cur.execute(f"select username from Users where Users.id = '{userID}'")
         return self.cur.fetchone()[0]
-    
-    # TODO check why the psycopg2 Formating is not working here
-    # This is a security risk
+
     def getUserIDbyName(self,username : str) -> Optional[int]:
-        self.cur.execute(f"select id from Users where username = '{username}'")
+        #It Needs to be a Tulpe.... That us such an Frustrating Error to debug :( 
+        self.cur.execute("select id from Users where username = %s",(username,))
         res = self.cur.fetchone()
         if (res is not None):
             return res[0]
@@ -94,17 +93,7 @@ class Database:
         self.cur.execute(f"update directmessages set readTime = now() where id = {msgId} and receiver = {userID}")
         self.con.commit()
     
-    # Proably rather ineffeciant but its a first step
-    # TODO Save the Messages on the device and request new ones
-    def GetAllChatMsg(self,sender : int ,receiver : int ):
-        self.cur.execute("""
-        select * from DirectMessages where
-        DirectMessages.sender = %s or DirectMessages.receiver = %s or
-        DirectMessages.receiver = %s or DirectMessages.sender = %s               
-        ORDER BY DirectMessages.id
-        """,
-        (sender,receiver,sender,receiver))
-        messages = self.cur.fetchall()
+    def MessagesToJsonArray(self,messages):
         result = []
         for msg in messages:
             recTime = msg[5]
@@ -126,3 +115,42 @@ class Database:
                            "readTime":readTime
                            })
         return result
+
+    # Proably rather ineffeciant Use "GetChatMsgs" For a more Optimzed Implementation
+    def GetAllChatMsg(self,sender : int ,receiver : int ):
+        self.cur.execute("""
+        select * from DirectMessages where
+        DirectMessages.sender = %s or DirectMessages.receiver = %s or
+        DirectMessages.receiver = %s or DirectMessages.sender = %s               
+        ORDER BY DirectMessages.id
+        """,
+        (sender,receiver,sender,receiver))
+        messages = self.cur.fetchall()
+        return self.MessagesToJsonArray(messages)
+    
+    # If cnt is negative get before that point
+    # If it is positive after
+    def GetChatMsgs(self,sender : int ,receiver : int ,baseline : int, cnt : int):
+        limit = abs(cnt)
+        if (cnt > 0):
+            self.cur.execute("""
+            select * from DirectMessages where
+            (DirectMessages.sender = %s or DirectMessages.receiver = %s or
+            DirectMessages.receiver = %s or DirectMessages.sender = %s) and
+            DirectMessages.id > %s             
+            ORDER BY DirectMessages.id
+            LIMIT %s
+            """,
+            (sender,receiver,sender,receiver,baseline,limit))
+        else:
+            self.cur.execute("""
+            select * from DirectMessages where
+            (DirectMessages.sender = %s or DirectMessages.receiver = %s or
+            DirectMessages.receiver = %s or DirectMessages.sender = %s) and
+            DirectMessages.id < %s             
+            ORDER BY DirectMessages.id
+            LIMIT %s
+            """,
+            (sender,receiver,sender,receiver,baseline,limit))
+        messages = self.cur.fetchall()
+        return self.MessagesToJsonArray(messages)

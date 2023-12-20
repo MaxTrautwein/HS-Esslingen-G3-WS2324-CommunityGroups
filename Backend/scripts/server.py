@@ -132,6 +132,22 @@ def GetAllChatMsgFor(sid,data):
         msgs = database.GetAllChatMsg(user,otherUser)
         sio.emit("reply", msgs ,to=sid)
 
+# More Efficiant Implementation than GetAllChatMsgFor
+# Requiers some Local Storace to be a usefull as it can be
+@sio.event
+def GetRelativeMsgFor(sid,data):
+    if ValidateAuthentication(sid):
+        database = getDB_Instance(sid)
+        user = getUserID(sid)
+        otherUser = data["target"]
+        baseline = data["baseline"]
+        limit = data["limit"]
+        oldMsgs = data["olderData"]
+        if oldMsgs:
+            limit *= -1
+        msgs = database.GetChatMsgs(user,otherUser,baseline,limit)
+        sio.emit("reply", msgs ,to=sid)
+
 # TODO Prevent this from overrinding none NONE Values
 @sio.event
 def UpdateReadTime(sid,data):
