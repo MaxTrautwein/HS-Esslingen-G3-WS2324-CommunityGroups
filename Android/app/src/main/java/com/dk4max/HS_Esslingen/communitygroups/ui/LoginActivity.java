@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.dk4max.HS_Esslingen.communitygroups;
+package com.dk4max.HS_Esslingen.communitygroups.ui;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -42,7 +42,7 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.dk4max.HS_Esslingen.communitygroups.BrowserSelectionAdapter.BrowserInfo;
+import com.dk4max.HS_Esslingen.communitygroups.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;
@@ -58,6 +58,7 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.browser.AnyBrowserMatcher;
 import net.openid.appauth.browser.BrowserMatcher;
 import net.openid.appauth.browser.ExactBrowserMatcher;
+import com.dk4max.HS_Esslingen.communitygroups.ui.BrowserSelectionAdapter.BrowserInfo;
 
 import java.util.Collections;
 import java.util.concurrent.CountDownLatch;

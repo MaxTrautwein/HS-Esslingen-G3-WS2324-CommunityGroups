@@ -43,6 +43,10 @@ dependencies {
 
     implementation ("io.socket:socket.io-client:2.0.0")
 
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+    implementation ("androidx.browser:browser:1.7.0")
+    implementation("androidx.annotation:annotation:1.7.1")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")

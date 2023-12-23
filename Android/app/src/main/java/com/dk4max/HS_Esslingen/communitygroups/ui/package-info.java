@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 The AppAuth for Android Authors. All Rights Reserved.
+ * Copyright 2015 The AppAuth for Android Authors. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -12,18 +12,8 @@
  * limitations under the License.
  */
 
-package com.dk4max.HS_Esslingen.communitygroups;
-
-import androidx.appcompat.app.AppCompatDelegate;
-
 /**
- * Application object; ensures that the support library is correctly configured for use of
- * vector drawables.
+ * App which demonstrates the use of the AppAuth library to authenticate a user with an IDP
+ * configured in res/raw/auth_config.json.
  */
-public final class Application extends android.app.Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
-}
+package com.dk4max.HS_Esslingen.communitygroups.ui;

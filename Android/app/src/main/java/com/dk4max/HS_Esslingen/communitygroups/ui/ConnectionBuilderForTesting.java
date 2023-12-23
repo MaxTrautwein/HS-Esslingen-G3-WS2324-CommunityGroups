@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.dk4max.HS_Esslingen.communitygroups;
+package com.dk4max.HS_Esslingen.communitygroups.ui;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;

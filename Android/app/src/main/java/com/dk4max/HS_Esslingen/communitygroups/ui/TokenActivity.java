@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.dk4max.HS_Esslingen.communitygroups;
+package com.dk4max.HS_Esslingen.communitygroups.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,12 +24,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dk4max.HS_Esslingen.communitygroups.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;
@@ -43,7 +43,7 @@ import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.EndSessionRequest;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
-
+import okio.Okio;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,9 +54,6 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
-
-import okio.Okio;
-
 
 
 
@@ -331,7 +328,7 @@ public class TokenActivity extends AppCompatActivity {
     }
 
     /**
-     * Demonstrates the use of {@link AuthState#performActionWithFreshTokens} to retrieve
+     * Demonstrates the use of {} to retrieve
      * user info from the IDP's user info endpoint. This callback will negotiate a new access
      * token / id token for use in a follow-up action, or provide an error if this fails.
      */
