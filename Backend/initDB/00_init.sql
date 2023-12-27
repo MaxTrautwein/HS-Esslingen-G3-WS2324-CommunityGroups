@@ -4,7 +4,8 @@
 -- TODO Maybe save a Public Key so we could add some encryption
 create table Users (
     id serial primary key,
-    sub text
+    sub text,
+    username text
 );
 
 -- A Group has a associated Owner, Name and Description
@@ -31,7 +32,7 @@ create table GroupMembers (
 create table DirectMessages (
     id serial primary key,
     sender int references Users(id),
-    target int references Users(id),
+    receiver int references Users(id),
     msg text,
     sendTime timestamp,
     recTime timestamp,
