@@ -1,17 +1,14 @@
 package com.dk4max.HS_Esslingen.communitygroups;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.dk4max.HS_Esslingen.communitygroups.socket.SocketManager;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -20,20 +17,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Handler;
-import android.os.Looper;
 
 
 import com.dk4max.HS_Esslingen.communitygroups.databinding.ActivityMainBinding;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
@@ -99,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 getAccessToken();
             }
         });
-        socket = SocketManager.getSocket();
+        socket = SocketManager.getInstance().getSocket();
         socket.on("status", authenticationResponse);
         socket.connect();
     }
@@ -133,32 +120,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAccessToken() {
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
 
-        String password = etPassword.getText().toString();
-        String username = etUsername.getText().toString();
-        String client_secret = "s24VQHhC7yl3csWkxsN4rqHZsomGeagl";
-
-        Call<AccessToken> call = service.getAccessToken("AppLogin", "password", client_secret, "openid", username, password);
-
-        call.enqueue(new Callback<AccessToken>() {
-            @Override
-            public void onResponse(Call<AccessToken> call, Response<AccessToken> response) {
-                if(response.isSuccessful()) {
-                    AccessToken accessToken = response.body();
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                    //MainActivity.this.startActivity(intent);
-                    System.out.println(accessToken.getAccessToken());
-                    sendAuthentication(accessToken.getAccessToken());
-                } else {
-                    Toast.makeText(MainActivity.this, "Errortest1243", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AccessToken> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Error45", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

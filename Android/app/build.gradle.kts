@@ -32,11 +32,21 @@ android {
 }
 
 dependencies {
+    implementation("joda-time:joda-time:2.12.5")
+    implementation("com.squareup.okio:okio:3.6.0")
+    implementation("net.openid:appauth:0.11.1")
+
+
+
     implementation("com.squareup.retrofit2:retrofit:2.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.4.0")
 
     implementation ("io.socket:socket.io-client:2.0.0")
 
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+    implementation ("androidx.browser:browser:1.7.0")
+    implementation("androidx.annotation:annotation:1.7.1")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
