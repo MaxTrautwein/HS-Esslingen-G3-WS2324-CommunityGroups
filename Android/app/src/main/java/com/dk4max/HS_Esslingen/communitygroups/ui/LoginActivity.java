@@ -133,7 +133,7 @@ public final class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        configureBrowserSelector();
+        //configureBrowserSelector();
         if (mConfiguration.hasConfigurationChanged()) {
             // discard any existing authorization state due to the change of configuration
             Log.i(TAG, "Configuration change detected, discarding old state");
@@ -189,7 +189,7 @@ public final class LoginActivity extends AppCompatActivity {
     void startAuth() {
         displayLoading("Making authorization request");
 
-        mUsePendingIntents = ((CheckBox) findViewById(R.id.pending_intents_checkbox)).isChecked();
+        //mUsePendingIntents = ((CheckBox) findViewById(R.id.pending_intents_checkbox)).isChecked();
 
         // WrongThread inference is incorrect for lambdas
         // noinspection WrongThread
@@ -313,6 +313,8 @@ public final class LoginActivity extends AppCompatActivity {
      * demo user to easily test the authorization flow against different browser and custom
      * tab configurations.
      */
+
+    /*
     @MainThread
     private void configureBrowserSelector() {
         Spinner spinner = (Spinner) findViewById(R.id.browser_selector);
@@ -341,6 +343,7 @@ public final class LoginActivity extends AppCompatActivity {
         });
     }
 
+    */
     /**
      * Performs the authorization request, using the browser selected in the spinner,
      * and a user-provided `login_hint` if available.
@@ -352,7 +355,7 @@ public final class LoginActivity extends AppCompatActivity {
         } catch (InterruptedException ex) {
             Log.w(TAG, "Interrupted while waiting for auth intent");
         }
-
+        /*
         if (mUsePendingIntents) {
             final Intent completionIntent = new Intent(this, TokenActivity.class);
             final Intent cancelIntent = new Intent(this, LoginActivity.class);
@@ -375,6 +378,11 @@ public final class LoginActivity extends AppCompatActivity {
                     mAuthIntent.get());
             startActivityForResult(intent, RC_AUTH);
         }
+        */
+        Intent intent = mAuthService.getAuthorizationRequestIntent(
+                mAuthRequest.get(),
+                mAuthIntent.get());
+        startActivityForResult(intent, RC_AUTH);
     }
 
     private void recreateAuthorizationService() {
@@ -402,7 +410,7 @@ public final class LoginActivity extends AppCompatActivity {
         findViewById(R.id.auth_container).setVisibility(View.GONE);
         findViewById(R.id.error_container).setVisibility(View.GONE);
 
-        ((TextView)findViewById(R.id.loading_description)).setText(loadingMessage);
+        //((TextView)findViewById(R.id.loading_description)).setText(loadingMessage);
     }
 
     @MainThread
@@ -411,7 +419,7 @@ public final class LoginActivity extends AppCompatActivity {
         findViewById(R.id.loading_container).setVisibility(View.GONE);
         findViewById(R.id.auth_container).setVisibility(View.GONE);
 
-        ((TextView)findViewById(R.id.error_description)).setText(error);
+        //((TextView)findViewById(R.id.error_description)).setText(error);
         findViewById(R.id.retry).setVisibility(recoverable ? View.VISIBLE : View.GONE);
     }
 
@@ -445,7 +453,7 @@ public final class LoginActivity extends AppCompatActivity {
             authEndpointStr = "Static auth endpoint: \n";
         }
         authEndpointStr += config.authorizationEndpoint;
-        ((TextView)findViewById(R.id.auth_endpoint)).setText(authEndpointStr);
+        //((TextView)findViewById(R.id.auth_endpoint)).setText(authEndpointStr);
 
         String clientIdStr;
         if (state.getLastRegistrationResponse() != null) {
@@ -454,7 +462,7 @@ public final class LoginActivity extends AppCompatActivity {
             clientIdStr = "Static client ID: \n";
         }
         clientIdStr += mClientId;
-        ((TextView)findViewById(R.id.client_id)).setText(clientIdStr);
+        //((TextView)findViewById(R.id.client_id)).setText(clientIdStr);
     }
 
     private void displayAuthCancelled() {

@@ -191,7 +191,7 @@ public class TokenActivity extends AppCompatActivity {
         findViewById(R.id.loading_container).setVisibility(View.GONE);
 
         AuthState state = mStateManager.getCurrent();
-
+        /*
         TextView refreshTokenInfoView = findViewById(R.id.refresh_token_info);
         refreshTokenInfoView.setText((state.getRefreshToken() == null)
                 ? R.string.no_refresh_token_returned
@@ -217,7 +217,7 @@ public class TokenActivity extends AppCompatActivity {
                         DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss ZZ").print(expiresAt)));
             }
         }
-
+        */
         Button refreshTokenButton = (Button) findViewById(R.id.refresh_token);
         refreshTokenButton.setVisibility(state.getRefreshToken() != null
                 ? View.VISIBLE
