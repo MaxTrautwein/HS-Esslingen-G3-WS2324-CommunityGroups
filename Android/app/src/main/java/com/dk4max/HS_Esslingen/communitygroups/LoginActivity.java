@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.dk4max.HS_Esslingen.communitygroups.Auth.AuthStateManager;
+import com.dk4max.HS_Esslingen.communitygroups.Auth.Configuration;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;

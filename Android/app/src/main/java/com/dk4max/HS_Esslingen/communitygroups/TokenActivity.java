@@ -30,6 +30,7 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dk4max.HS_Esslingen.communitygroups.Auth.AuthStateManager;
+import com.dk4max.HS_Esslingen.communitygroups.Auth.Configuration;
 import com.dk4max.HS_Esslingen.communitygroups.socket.SocketManager;
 import com.google.android.material.snackbar.Snackbar;
 
