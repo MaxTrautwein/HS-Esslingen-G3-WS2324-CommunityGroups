@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.dk4max.HS_Esslingen.communitygroups.ui;
+package com.dk4max.HS_Esslingen.communitygroups;
 
 import android.content.Context;
 import android.content.Intent;
