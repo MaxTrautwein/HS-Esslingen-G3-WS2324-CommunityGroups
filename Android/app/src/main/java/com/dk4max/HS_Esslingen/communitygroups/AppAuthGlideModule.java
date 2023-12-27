@@ -12,10 +12,13 @@
  * limitations under the License.
  */
 
+
 package com.dk4max.HS_Esslingen.communitygroups;
 
 import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
+
+// Used To show the Profile Picture in the Token Activity if one is set
 
 @GlideModule
 public final class AppAuthGlideModule extends AppGlideModule {

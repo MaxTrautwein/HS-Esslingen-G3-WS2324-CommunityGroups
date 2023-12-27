@@ -15,7 +15,6 @@
 package com.dk4max.HS_Esslingen.communitygroups;
 
 import android.annotation.TargetApi;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,12 +25,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.AnyThread;
 import androidx.annotation.ColorRes;
@@ -42,7 +36,7 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
-import com.dk4max.HS_Esslingen.communitygroups.R;
+import com.dk4max.HS_Esslingen.communitygroups.Auth.AuthStateManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;

@@ -29,7 +29,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dk4max.HS_Esslingen.communitygroups.R;
+import com.dk4max.HS_Esslingen.communitygroups.Auth.AuthStateManager;
+import com.dk4max.HS_Esslingen.communitygroups.socket.SocketManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import net.openid.appauth.AppAuthConfiguration;
@@ -44,7 +45,7 @@ import net.openid.appauth.EndSessionRequest;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 import okio.Okio;
-import org.joda.time.format.DateTimeFormat;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -191,33 +192,7 @@ public class TokenActivity extends AppCompatActivity {
         findViewById(R.id.loading_container).setVisibility(View.GONE);
 
         AuthState state = mStateManager.getCurrent();
-        /*
-        TextView refreshTokenInfoView = findViewById(R.id.refresh_token_info);
-        refreshTokenInfoView.setText((state.getRefreshToken() == null)
-                ? R.string.no_refresh_token_returned
-                : R.string.refresh_token_returned);
 
-        TextView idTokenInfoView = (TextView) findViewById(R.id.id_token_info);
-        idTokenInfoView.setText((state.getIdToken()) == null
-                ? R.string.no_id_token_returned
-                : R.string.id_token_returned);
-
-        TextView accessTokenInfoView = (TextView) findViewById(R.id.access_token_info);
-        if (state.getAccessToken() == null) {
-            accessTokenInfoView.setText(R.string.no_access_token_returned);
-        } else {
-            Long expiresAt = state.getAccessTokenExpirationTime();
-            if (expiresAt == null) {
-                accessTokenInfoView.setText(R.string.no_access_token_expiry);
-            } else if (expiresAt < System.currentTimeMillis()) {
-                accessTokenInfoView.setText(R.string.access_token_expired);
-            } else {
-                String template = getResources().getString(R.string.access_token_expires_at);
-                accessTokenInfoView.setText(String.format(template,
-                        DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss ZZ").print(expiresAt)));
-            }
-        }
-        */
         Button refreshTokenButton = (Button) findViewById(R.id.refresh_token);
         refreshTokenButton.setVisibility(state.getRefreshToken() != null
                 ? View.VISIBLE
@@ -335,6 +310,7 @@ public class TokenActivity extends AppCompatActivity {
     @MainThread
     private void fetchUserInfo() {
         displayLoading("Fetching user info");
+        SocketManager.getInstance().OpenConnection(); // TESTING
         mStateManager.getCurrent().performActionWithFreshTokens(mAuthService, this::fetchUserInfo);
     }
 

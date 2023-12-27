@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.dk4max.HS_Esslingen.communitygroups;
+package com.dk4max.HS_Esslingen.communitygroups.Auth;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -41,8 +41,12 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class AuthStateManager {
 
-    private static final AtomicReference<WeakReference<AuthStateManager>> INSTANCE_REF =
-            new AtomicReference<>(new WeakReference<>(null));
+
+    private static final AtomicReference<AuthStateManager> INSTANCE_REF =
+            new AtomicReference<>(null);
+
+    //private static final AtomicReference<WeakReference<AuthStateManager>> INSTANCE_REF =
+    //        new AtomicReference<>(new WeakReference<>(null));
 
     private static final String TAG = "AuthStateManager";
 
@@ -54,11 +58,11 @@ public class AuthStateManager {
     private final AtomicReference<AuthState> mCurrentAuthState;
 
     @AnyThread
-    public static AuthStateManager getInstance(@NonNull Context context) {
-        AuthStateManager manager = INSTANCE_REF.get().get();
+    public static AuthStateManager getInstance(Context context ) {
+        AuthStateManager manager = INSTANCE_REF.get();
         if (manager == null) {
             manager = new AuthStateManager(context.getApplicationContext());
-            INSTANCE_REF.set(new WeakReference<>(manager));
+            INSTANCE_REF.set(manager);
         }
 
         return manager;
@@ -166,4 +170,10 @@ public class AuthStateManager {
             mPrefsLock.unlock();
         }
     }
+
+    // Get the Current Access Token
+    public String getAccessToken(){
+        return  this.getCurrent().getAccessToken();
+    }
+
 }
