@@ -31,7 +31,6 @@
 
         <activity
             android:name=".TokenActivity"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" >
         </activity>
 
