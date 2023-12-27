@@ -50,18 +50,17 @@
                 android:id="@+id/auth_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/section_margin"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/start_auth"
                     style="@style/Widget.AppCompat.Button.Colored"
-                    android:text="@string/start_authorization"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"/>
-
+                    android:layout_gravity="center"
+                    android:text="@string/start_authorization" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -73,19 +72,10 @@
                         android:id="@+id/login_hint_value"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"
-                        android:hint="@string/login_hint_value"/>
+                        android:hint="@string/login_hint_value"
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
-
-
-
-
-
 
 
             </LinearLayout>
