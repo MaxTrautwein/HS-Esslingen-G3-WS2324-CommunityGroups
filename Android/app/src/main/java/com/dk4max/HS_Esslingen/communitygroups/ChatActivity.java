@@ -66,6 +66,7 @@ public class ChatActivity extends AppCompatActivity {
                     chatTextView.setId(View.generateViewId());
                     chatTextView.setText(inputMessage.getText());
                     chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                    chatTextView.setGravity(android.view.Gravity.RIGHT);
                     chatTextView.setTextSize(20);
                     linearLayout.addView(chatTextView);
                     inputMessage.setText("");
@@ -94,16 +95,20 @@ public class ChatActivity extends AppCompatActivity {
 
                         TextView chatTextView = new TextView(ChatActivity.this);
 
-                        chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+
+
+                        //chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
                         chatTextView.setTextSize(20);
                         if(sender.equals(socket.getCurrentChat())){
                             chatTextView.setLayoutParams(templateOthersMessage.getLayoutParams());
                             chatTextView.setText(templateOthersMessage.getText().toString());
+                            chatTextView.setGravity(android.view.Gravity.LEFT);
                             chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
-                        } else {
+                        } else if(sender.equals(socket.getUsername())){
                             chatTextView.setLayoutParams(templateOwnMessage.getLayoutParams());
                             chatTextView.setText(templateOwnMessage.getText().toString());
-                            chatTextView.setTextColor(Color.parseColor("#D3D3D3"));
+                            chatTextView.setGravity(android.view.Gravity.RIGHT);
+                            chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
                         }
 
                         chatTextView.setId(View.generateViewId());

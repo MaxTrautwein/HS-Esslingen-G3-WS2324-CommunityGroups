@@ -20,6 +20,7 @@ public class SocketManager {
     protected AuthState authState = AuthState.Init;
 
     private String currentChat = "None";
+    private String username = "None";
 
     private int currentChatID = -1;
 
@@ -76,6 +77,15 @@ public class SocketManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void setUsername(String name){
+        username = name;
+    }
+
+    public String getUsername(){
+        return username;
     }
 
 

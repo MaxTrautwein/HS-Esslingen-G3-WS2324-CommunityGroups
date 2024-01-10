@@ -61,6 +61,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 for(int i = 0; i<allChats.length(); i++){
                     try {
                         JSONObject userObject = allChats.getJSONObject(i);
+                        System.out.println(allChats);
                         int userId = userObject.getInt("user_id");
                         String username = userObject.getString("username");
 
