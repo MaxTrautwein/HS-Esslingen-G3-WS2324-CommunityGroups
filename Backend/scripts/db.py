@@ -57,13 +57,11 @@ class Database:
 
     def getUserIDbyName(self,username : str) -> Optional[int]:
         #It Needs to be a Tulpe.... That us such an Frustrating Error to debug :( 
-        try:
-            self.cur.execute("select id from Users where username = %s",(username,))
-            res = self.cur.fetchone()
-            if (res is not None):
-                return res[0]
-        except Exception:
-            return None 
+        self.cur.execute("select id from Users where username = %s",(username,))
+        res = self.cur.fetchone()
+        if (res is not None):
+            return res[0]
+        return None 
 
     # Privae Messages Chat "Room"'s
     def getDirectMessageChatRooms(self,userID : int):
