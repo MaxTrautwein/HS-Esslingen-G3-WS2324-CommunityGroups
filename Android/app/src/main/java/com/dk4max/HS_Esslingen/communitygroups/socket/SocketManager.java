@@ -1,8 +1,11 @@
 package com.dk4max.HS_Esslingen.communitygroups.socket;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.dk4max.HS_Esslingen.communitygroups.Auth.AuthStateManager;
+import com.dk4max.HS_Esslingen.communitygroups.ChatroomActivity;
 import com.dk4max.HS_Esslingen.communitygroups.MainActivity;
 
 import java.util.logging.Logger;
@@ -15,6 +18,10 @@ public class SocketManager {
     private static SocketManager INSTANCE;
     private Socket socket;
     protected AuthState authState = AuthState.Init;
+
+    private String currentChat = "None";
+
+    private int currentChatID = -1;
 
 
     private SocketManager() {
@@ -49,17 +56,19 @@ public class SocketManager {
     }
 
 
-    public void OpenConnection(){
+    public void OpenConnection(Context context) {
         String Token = AuthStateManager.getInstance(null).getAccessToken();
-        Log.d("token",Token);
-        OpenConnection(Token);
+        Log.d("token", Token);
+        OpenConnection(context, Token);
     }
-    public void OpenConnection(String token){
+
+    public void OpenConnection(Context context, String token) {
         getSocket();
         socket.connect();
-        socket.on("status", authenticationResponse);
+        socket.on("status", authenticationResponse(context));
         sendAuthentication(token);
     }
+
 
     private void sendAuthentication(String token){
         try{
@@ -73,21 +82,40 @@ public class SocketManager {
 
 
 
+    private Emitter.Listener authenticationResponse(final Context context) {
+        return new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                String serverResponse = (String) args[0];
 
-    private Emitter.Listener authenticationResponse = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            String serverResponse = (String) args[0];
-            if ("Auth Success".equals(serverResponse)) {
-                SocketManager.getInstance().authState = AuthState.Pass;
-                Log.d("Auth","Pass");
-            } else if ("Token Error".equals(serverResponse)) {
-                SocketManager.getInstance().authState = AuthState.Fail;
-                Log.d("Auth","Fail");
+                if ("Auth Success".equals(serverResponse)) {
+                    SocketManager.getInstance().authState = AuthState.Pass;
+                    Log.d("Auth", "Pass");
+                    Intent intent = new Intent(context, ChatroomActivity.class);
+                    context.startActivity(intent);
+                } else if ("Token Error".equals(serverResponse)) {
+                    SocketManager.getInstance().authState = AuthState.Fail;
+                    Log.d("Auth", "Fail");
+                }
             }
-        }
-    };
+        };
+    }
 
+    public void setCurrentChat(String username){
+        currentChat = username;
+    }
+
+    public String getCurrentChat(){
+        return currentChat;
+    }
+
+    public void setCurrentChatID(int id){
+        currentChatID = id;
+    }
+
+    public int getCurrentChatID(){
+        return currentChatID;
+    }
 
 
 }

@@ -29,11 +29,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/small_profil" />
 
-    <TextView
+    <EditText
         android:id="@+id/Header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Communinty Groups"
+        android:text=""
+        android:hint="New Chat with"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
@@ -53,170 +54,43 @@
         app:layout_constraintBottom_toTopOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@android:drawable/ic_menu_add"
+        android:clickable="true"/>
 
-    <TextView
-        android:id="@+id/recentMessages"
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:text="Recent Messages"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginStart="10dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <TextView
+            android:id="@+id/recentMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="130dp"
+            android:text="All Chats"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_marginStart="10dp"/>
 
-    <TextView
-        android:id="@+id/SWT"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="SWT"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/recentMessages"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginStart="50dp"/>
-
-    <TextView
-        android:id="@+id/SWB3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="SWB3"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/SWT"
-        tools:layout_editor_absoluteX="1dp"
-        android:layout_marginStart="50dp"/>
-
-    <TextView
-        android:id="@+id/TIB2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="TIB2"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/SWB3"
-        tools:layout_editor_absoluteX="1dp"
-        android:layout_marginStart="50dp"/>
-
-
-    <TextView
-        android:id="@+id/IT"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Internet Technologien"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/TIB2"
-        tools:layout_editor_absoluteX="0dp"
-        android:layout_marginStart="50dp"/>
-
-    <TextView
-        android:id="@+id/Group5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Group5"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/IT"
-        tools:layout_editor_absoluteX="8dp"
-        android:layout_marginStart="50dp"/>
-
-    <TextView
-        android:id="@+id/Group6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:text="Group6"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/Group5"
-        tools:layout_editor_absoluteX="1dp"
-        android:layout_marginStart="50dp"/>
-
-    <ImageView
-        android:id="@+id/SWTpic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="175dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/SWT"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_filled" />
-
-    <ImageView
-        android:id="@+id/SWB3pic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="223dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/SWB3"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_filled" />
-
-    <ImageView
-        android:id="@+id/TIB2pic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="272dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/TIB2"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_filled" />
-
-    <ImageView
-        android:id="@+id/ITpic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="324dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/IT"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_filled" />
-
-    <ImageView
-        android:id="@+id/Group5pic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="372dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/Group5"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_filled" />
-
-    <ImageView
-        android:id="@+id/Group6pic"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="420dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintEnd_toStartOf="@+id/Group6"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/circle_filled" />
+        <TextView
+            android:id="@+id/chats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            app:layout_constraintTop_toBottomOf="@+id/recentMessages"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_marginStart="50dp"
+            android:clickable="true"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,7 +10,7 @@
         android:id="@+id/Header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SWT"
+        android:text=""
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
@@ -28,9 +28,10 @@
         android:background="@color/white"
         android:inputType="text"
         android:lineSpacingExtra="10sp"
-        android:text="type something"
+        android:text=""
+        android:hint="type something"
         android:textAlignment="center"
-        android:textColor="#CDCDCD"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.377"
@@ -55,7 +56,8 @@
         android:background="#00FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/arrow_back" />
+        app:srcCompat="@drawable/arrow_back"
+        android:clickable="true"/>
 
     <ImageButton
         android:id="@+id/imageButton2"
@@ -65,7 +67,8 @@
         android:layout_marginBottom="26dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/send" />
+        app:srcCompat="@drawable/send"
+        android:clickable="true"/>
 
     <ImageView
         android:id="@+id/SWB3pic"
@@ -77,6 +80,40 @@
         app:layout_constraintEnd_toStartOf="@+id/Header"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/circle_filled" />
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/OwnMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textColor="#FF0000"
+            android:textSize="30sp"
+            app:layout_constraintTop_toBottomOf="@+id/recentMessages"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_marginStart="50dp" />
+
+        <TextView
+            android:id="@+id/OthersMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textColor="#800080"
+            android:textSize="30sp"
+            app:layout_constraintTop_toBottomOf="@+id/recentMessages"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_marginStart="50dp" />
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

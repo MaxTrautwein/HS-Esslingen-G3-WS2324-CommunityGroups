@@ -45,6 +45,8 @@ import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.EndSessionRequest;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
+
+import io.socket.emitter.Emitter;
 import okio.Okio;
 
 import org.json.JSONException;
@@ -105,6 +107,7 @@ public class TokenActivity extends AppCompatActivity {
                         .build());
 
         setContentView(R.layout.activity_token);
+
         displayLoading("Restoring state...");
 
         if (savedInstanceState != null) {
@@ -311,7 +314,7 @@ public class TokenActivity extends AppCompatActivity {
     @MainThread
     private void fetchUserInfo() {
         displayLoading("Fetching user info");
-        SocketManager.getInstance().OpenConnection(); // TESTING
+        SocketManager.getInstance().OpenConnection(this); // TESTING
         mStateManager.getCurrent().performActionWithFreshTokens(mAuthService, this::fetchUserInfo);
     }
 
@@ -415,4 +418,6 @@ public class TokenActivity extends AppCompatActivity {
         startActivity(mainIntent);
         finish();
     }
+
+
 }
