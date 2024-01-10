@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dk4max.HS_Esslingen.communitygroups.socket.SocketManager;
 
@@ -38,6 +39,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         }
+
+        socket.getSocket().on("status", displayStatus());
 
         ImageView backButton = findViewById(R.id.imageButton1);
         ImageView sendButton = findViewById(R.id.imageButton2);
@@ -87,42 +90,72 @@ public class ChatActivity extends AppCompatActivity {
                 TextView templateOthersMessage = findViewById(R.id.OthersMessage);
                 LinearLayout linearLayout = findViewById(R.id.linearLayout);
 
-                for(int i = 0; i<allMessages.length(); i++){
-                    try {
-                        JSONObject messageObject = allMessages.getJSONObject(i);
-                        String sender = messageObject.getString("sender");
-                        String msg = messageObject.getString("msg");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0; i<allMessages.length(); i++){
+                            try {
+                                JSONObject messageObject = allMessages.getJSONObject(i);
+                                String sender = messageObject.getString("sender");
+                                String receiver = messageObject.getString("receiver");
+                                String msg = messageObject.getString("msg");
 
-                        TextView chatTextView = new TextView(ChatActivity.this);
+                                TextView chatTextView = new TextView(ChatActivity.this);
 
 
 
-                        //chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
-                        chatTextView.setTextSize(20);
-                        if(sender.equals(socket.getCurrentChat())){
-                            chatTextView.setLayoutParams(templateOthersMessage.getLayoutParams());
-                            chatTextView.setText(templateOthersMessage.getText().toString());
-                            chatTextView.setGravity(android.view.Gravity.LEFT);
-                            chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
-                        } else if(sender.equals(socket.getUsername())){
-                            chatTextView.setLayoutParams(templateOwnMessage.getLayoutParams());
-                            chatTextView.setText(templateOwnMessage.getText().toString());
-                            chatTextView.setGravity(android.view.Gravity.RIGHT);
-                            chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                                //chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                                chatTextView.setTextSize(20);
+                                System.out.println(sender);
+                                System.out.println(receiver);
+                                System.out.println(msg);
+                                if(sender.equals(socket.getCurrentChat())&& receiver.equals(socket.getUsername())){
+                                    chatTextView.setLayoutParams(templateOthersMessage.getLayoutParams());
+                                    chatTextView.setText(templateOthersMessage.getText().toString());
+                                    chatTextView.setGravity(android.view.Gravity.LEFT);
+                                    chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                                    chatTextView.setText(msg);
+                                    chatTextView.setId(View.generateViewId());
+                                    linearLayout.addView(chatTextView);
+                                } else if(sender.equals(socket.getUsername()) && receiver.equals(socket.getCurrentChat())){
+                                    chatTextView.setLayoutParams(templateOwnMessage.getLayoutParams());
+                                    chatTextView.setText(templateOwnMessage.getText().toString());
+                                    chatTextView.setGravity(android.view.Gravity.RIGHT);
+                                    chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                                    chatTextView.setId(View.generateViewId());
+                                    linearLayout.addView(chatTextView);
+                                    chatTextView.setText(msg);
+                                }
+
+
+
+                            } catch (Exception e){
+
+                            }
                         }
-
-                        chatTextView.setId(View.generateViewId());
-
-                        chatTextView.setText(msg);
-                        linearLayout.addView(chatTextView);
-
-                    } catch (Exception e){
-
                     }
-                }
-
-
+                });
             }
         };
+    }
+
+    private Emitter.Listener displayStatus() {
+        return new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                String statusMessage = (String) args[0];
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatActivity.this, statusMessage, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        };
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -18,6 +18,9 @@ import com.dk4max.HS_Esslingen.communitygroups.socket.SocketManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -57,41 +60,55 @@ public class ChatroomActivity extends AppCompatActivity {
                 JSONArray allChats = (JSONArray) args[0];
                 TextView templateTextView = findViewById(R.id.chats);
                 LinearLayout linearLayout = findViewById(R.id.linearLayout);
+                ArrayList<String> chats = new ArrayList<>();
 
-                for(int i = 0; i<allChats.length(); i++){
-                    try {
-                        JSONObject userObject = allChats.getJSONObject(i);
-                        System.out.println(allChats);
-                        int userId = userObject.getInt("user_id");
-                        String username = userObject.getString("username");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0; i<allChats.length(); i++){
+                            try {
+                                JSONObject userObject = allChats.getJSONObject(i);
+                                System.out.println(allChats);
+                                int userId = userObject.getInt("user_id");
+                                String username = userObject.getString("username");
 
-                        TextView chatTextView = new TextView(ChatroomActivity.this);
-                        chatTextView.setLayoutParams(templateTextView.getLayoutParams());
-                        chatTextView.setText(templateTextView.getText().toString());
-                        chatTextView.setId(View.generateViewId());
-                        chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
-                        chatTextView.setTextSize(20);
+                                TextView chatTextView = new TextView(ChatroomActivity.this);
+                                chatTextView.setLayoutParams(templateTextView.getLayoutParams());
+                                chatTextView.setText(templateTextView.getText().toString());
+                                chatTextView.setId(View.generateViewId());
+                                chatTextView.setTextColor(Color.parseColor("#FFFFFF"));
+                                chatTextView.setTextSize(20);
 
 
-                        chatTextView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                SocketManager.getInstance().setCurrentChat(username);
-                                SocketManager.getInstance().setCurrentChatID(userId);
-                                Intent intent = new Intent(ChatroomActivity.this, ChatActivity.class);
-                                startActivity(intent);
+                                chatTextView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        SocketManager.getInstance().setCurrentChat(username);
+                                        SocketManager.getInstance().setCurrentChatID(userId);
+                                        Intent intent = new Intent(ChatroomActivity.this, ChatActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                chatTextView.setText(username);
+                                if(chats.contains(username)) {
+                                    linearLayout.addView(chatTextView);
+                                }
+                                chats.add(username);
+
+                            } catch (Exception e){
+
                             }
-                        });
-                        chatTextView.setText(username);
-                        linearLayout.addView(chatTextView);
-
-                    } catch (Exception e){
-
+                        }
                     }
-                }
+                });
 
 
             }
         };
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

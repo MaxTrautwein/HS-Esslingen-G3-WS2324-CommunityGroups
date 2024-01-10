@@ -314,6 +314,13 @@ public class TokenActivity extends AppCompatActivity {
     @MainThread
     private void fetchUserInfo() {
         displayLoading("Fetching user info");
+        try {
+            String name = mUserInfoJson.get().getString("preferred_username");
+            //System.out.println(mUserInfoJson.get());
+            SocketManager.getInstance().setUsername(name);
+        } catch (Exception e){
+
+        }
         SocketManager.getInstance().OpenConnection(this); // TESTING
         mStateManager.getCurrent().performActionWithFreshTokens(mAuthService, this::fetchUserInfo);
     }
