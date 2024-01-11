@@ -90,7 +90,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                     }
                                 });
                                 chatTextView.setText(username);
-                                if(chats.contains(username)) {
+                                if(!chats.contains(username)) {
                                     linearLayout.addView(chatTextView);
                                 }
                                 chats.add(username);

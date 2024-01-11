@@ -108,6 +108,8 @@ public class ChatActivity extends AppCompatActivity {
                                 chatTextView.setTextSize(20);
                                 System.out.println(sender);
                                 System.out.println(receiver);
+                                System.out.println(socket.getCurrentChat());
+                                System.out.println(socket.getUsername());
                                 System.out.println(msg);
                                 if(sender.equals(socket.getCurrentChat())&& receiver.equals(socket.getUsername())){
                                     chatTextView.setLayoutParams(templateOthersMessage.getLayoutParams());

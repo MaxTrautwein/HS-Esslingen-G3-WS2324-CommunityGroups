@@ -226,6 +226,8 @@ public class TokenActivity extends AppCompatActivity {
                 String name = "???";
                 if (userInfo.has("name")) {
                     name = userInfo.getString("name");
+                    String username = mUserInfoJson.get().getString("preferred_username");
+                    SocketManager.getInstance().setUsername(username);
                 }
                 ((TextView) findViewById(R.id.userinfo_name)).setText(name);
 
@@ -314,13 +316,6 @@ public class TokenActivity extends AppCompatActivity {
     @MainThread
     private void fetchUserInfo() {
         displayLoading("Fetching user info");
-        try {
-            String name = mUserInfoJson.get().getString("preferred_username");
-            //System.out.println(mUserInfoJson.get());
-            SocketManager.getInstance().setUsername(name);
-        } catch (Exception e){
-
-        }
         SocketManager.getInstance().OpenConnection(this); // TESTING
         mStateManager.getCurrent().performActionWithFreshTokens(mAuthService, this::fetchUserInfo);
     }
